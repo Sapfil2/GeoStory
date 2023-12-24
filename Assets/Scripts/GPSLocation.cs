@@ -12,9 +12,7 @@ public class GPSLocation : MonoBehaviour
     public TMP_Text altitude; 
     public TMP_Text horizontalAccuracy; 
     public TMP_Text timestamp;
-
-    public TestMap mapImage;
-
+    public MapSpriteShifter shifter;
 
     // Start is called before the first frame update
     void Start()
@@ -65,14 +63,13 @@ public class GPSLocation : MonoBehaviour
     {
         if (Input.location.status == LocationServiceStatus.Running)
         {
-            mapImage.setCoordinates(55.75862f, 48.74327f);
+            shifter.SetCoordinates(new Vector2(Input.location.lastData.latitude, Input.location.lastData.longitude));
             GPSStatus.text = "GPS running";
             latitude.text = "LAT " + Input.location.lastData.latitude.ToString();
             longitude.text = "LON " + Input.location.lastData.longitude.ToString();
             altitude.text = "ALT " + Input.location.lastData.altitude.ToString();
             horizontalAccuracy.text = "ACC " + Input.location.lastData.horizontalAccuracy.ToString();
             timestamp.text = "TIM " + Input.location.lastData.timestamp.ToString();
-
         }
     }
 }
