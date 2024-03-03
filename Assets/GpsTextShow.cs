@@ -30,7 +30,6 @@ public class GpsTextShow : MonoBehaviour
         altitude.text = "ALT " + locationGetter.getAltitude().ToString(defaultFormatter);
         horizontalAccuracy.text = "ACC " + locationGetter.getAccuracy().ToString(defaultFormatter);
         timestampText.text = "TIM " + getLocalDateLimeFromTimestamp(locationGetter.getTimestamp());
-        Debug.Log(latitude.text);
     }
 
     private string getLocalDateLimeFromTimestamp(double timestamp)

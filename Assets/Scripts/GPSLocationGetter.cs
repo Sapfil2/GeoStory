@@ -7,6 +7,13 @@ using System.Linq;
  */
 public class GPSLocationGetter : MonoBehaviour
 {
+    public bool FakeGpsDebugMode = false;
+    private Vector2 fakeGpsCoords;
+    private Vector2 fakeGpsPathCenter = new Vector3(55.752085f, 48.744618f);
+    private float fakeGpsTimer = 0;
+    public float fakeGpsPathSpeed = 0.1f;
+    public float fakeGpsPathRadius = 0.005f;
+
     public MapSpriteShifter shifter;
 
     public readonly short cacheSize = 5;
@@ -79,20 +86,39 @@ public class GPSLocationGetter : MonoBehaviour
 
     private void UpdateGPSData()
     {
-        if (Input.location.status == LocationServiceStatus.Running)
+        currentCacheIndex++;
+        if (currentCacheIndex >= cacheSize)
+            currentCacheIndex = 0;
+
+        if (!FakeGpsDebugMode)
         {
-            shifter.SetCoordinates(new Vector2(Input.location.lastData.latitude, Input.location.lastData.longitude));
-            gpsStatus = GPSStatus.RUNNING;
-
-            if (currentCacheIndex >= cacheSize) 
-                currentCacheIndex = 0;
-
-            latitudeCache[currentCacheIndex] = Input.location.lastData.latitude;
-            longitudeCache[currentCacheIndex] = Input.location.lastData.longitude;
-            altitudeCache[currentCacheIndex] = Input.location.lastData.altitude;
-            accurcyCache[currentCacheIndex] = Input.location.lastData.horizontalAccuracy;
-            timestamp = Input.location.lastData.timestamp;
+            if (Input.location.status == LocationServiceStatus.Running)
+            {
+                gpsStatus = GPSStatus.RUNNING;
+                latitudeCache[currentCacheIndex] = Input.location.lastData.latitude;
+                longitudeCache[currentCacheIndex] = Input.location.lastData.longitude;
+                altitudeCache[currentCacheIndex] = Input.location.lastData.altitude;
+                accurcyCache[currentCacheIndex] = Input.location.lastData.horizontalAccuracy;
+                timestamp = Input.location.lastData.timestamp;             
+            }
         }
+        else
+        {
+            gpsStatus = GPSStatus.FAKE;
+            latitudeCache[currentCacheIndex] = fakeGpsCoords.x;
+            longitudeCache[currentCacheIndex] = fakeGpsCoords.y;
+        }
+
+
+        shifter.SetCoordinates(new Vector2(getLatitude(), getLongitude()));
+    }
+
+    private void Update()
+    {
+        fakeGpsTimer += Time.deltaTime;
+        fakeGpsCoords = fakeGpsPathCenter + new Vector2(
+            Mathf.Cos(fakeGpsTimer * fakeGpsPathSpeed) / 2 * fakeGpsPathRadius,
+            Mathf.Sin(fakeGpsTimer * fakeGpsPathSpeed) * fakeGpsPathRadius);
     }
 
     public GPSStatus GetGPSStatus() 
@@ -131,6 +157,7 @@ public class GPSLocationGetter : MonoBehaviour
         RUNNING,
         TIMEOUT,
         DISABLED,
-        FAILED
+        FAILED,
+        FAKE
     }
 }

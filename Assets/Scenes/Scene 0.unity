@@ -600,6 +600,7 @@ MonoBehaviour:
   altitude: {fileID: 1215165861}
   horizontalAccuracy: {fileID: 119764131}
   timestampText: {fileID: 1288275426}
+  defaultFormatter: N3
   locationGetter: {fileID: 211726401}
 --- !u!1 &211726400
 GameObject:
@@ -631,6 +632,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbcaf6e58e1c4634b83c9adbeedea8cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FakeGpsDebugMode: 0
+  fakeGpsPathSpeed: 0.3
+  fakeGpsPathRadius: 0.001
   shifter: {fileID: 1770700533}
   initLatitude: 55.752087
   initLongitude: 48.744617
@@ -2624,7 +2628,8 @@ MonoBehaviour:
   imageSize: {x: 30.72, y: 30.72}
   ldCorner: {x: 55.73762, y: 48.72372}
   urCorner: {x: 55.76242, y: 48.76755}
-  currentCoords: {x: 0, y: 0}
+  movementSmoothFactor: 1.005
+  acceptedCoords: {x: 0, y: 0, z: 0}
 --- !u!1 &1860237489
 GameObject:
   m_ObjectHideFlags: 0
