@@ -14,7 +14,7 @@ public class GPSLocationGetter : MonoBehaviour
     public float fakeGpsPathSpeed = 0.1f;
     public float fakeGpsPathRadius = 0.005f;
 
-    public MapSpriteShifter shifter;
+  //  public MapSpriteShifter shifter;
 
     public readonly short cacheSize = 5;
     public float initLatitude = 55.752085f;
@@ -110,7 +110,7 @@ public class GPSLocationGetter : MonoBehaviour
         }
 
 
-        shifter.SetCoordinates(new Vector2(getLatitude(), getLongitude()));
+   //     shifter.SetCoordinates(new Vector2(getLatitude(), getLongitude()));
     }
 
     private void Update()

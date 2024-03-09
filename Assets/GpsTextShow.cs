@@ -11,7 +11,7 @@ public class GpsTextShow : MonoBehaviour
     public TMP_Text altitude;
     public TMP_Text horizontalAccuracy;
     public TMP_Text timestampText;
-    public String defaultFormatter = "N3";
+    public string defaultFormatter = "N3";
 
     public GPSLocationGetter locationGetter;
 
@@ -26,7 +26,7 @@ public class GpsTextShow : MonoBehaviour
     {
         GPSStatus.text = locationGetter.GetGPSStatus().ToString();
         latitude.text = "LAT " + locationGetter.getLatitude().ToString(defaultFormatter);
-        longitude.text = "LON " + locationGetter.getLongitude().ToString(defaultFormatter);
+        longitude.text = "LON " + locationGetter.getLongitude().ToString(defaultFormatter);      
         altitude.text = "ALT " + locationGetter.getAltitude().ToString(defaultFormatter);
         horizontalAccuracy.text = "ACC " + locationGetter.getAccuracy().ToString(defaultFormatter);
         timestampText.text = "TIM " + getLocalDateLimeFromTimestamp(locationGetter.getTimestamp());

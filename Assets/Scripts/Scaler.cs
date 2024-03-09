@@ -35,8 +35,6 @@ public class Scaler : MonoBehaviour
 
     private void Rescale()
     { 
-        transform.localScale = new Vector3 (scale, scale, 1);
-        shifter.UpdateImageScale();
+        shifter.UpdateImageScale(scale);
     }
-
 }

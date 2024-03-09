@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
@@ -15,7 +16,8 @@ public class MapSpriteShifter : MonoBehaviour
     public Vector2 imageSize = new Vector2(30.72f, 30.72f); 
     public Vector2 ldCorner = new Vector2(55.73762f,48.72372f); // x = Lon, y = lat;
     public Vector2 urCorner = new Vector2(55.76218f,48.76745f); // x = Lon, y = lat;
-    public float movementSmoothFactor = 1.005f;
+    public float movementSmoothFactor = 1.03f;
+    public Vector3 correction;
 
     public Vector3 acceptedCoords; // debug
 
@@ -26,6 +28,9 @@ public class MapSpriteShifter : MonoBehaviour
 
     private Vector3 currentPosition;
     private Vector2 lastGpsCoords;
+
+    public bool instantMode;
+    public TMP_Text modeText;
 
     private void Start()
     {
@@ -39,16 +44,30 @@ public class MapSpriteShifter : MonoBehaviour
 
     }
 
-    private void Update()
+    public void switchMode() 
     {
-        Vector3 newCoords = ((currentPosition - acceptedCoords) / movementSmoothFactor) + acceptedCoords;
-        Debug.Log((currentPosition - acceptedCoords).magnitude);
-        currentPosition = newCoords; 
-        image.transform.position = currentPosition;
+        instantMode = !instantMode;
+        if (instantMode) { modeText.text = "MODE: INSTANT"; }
+        else { modeText.text = "MODE: INTERPOLATE"; }
     }
 
-    public void UpdateImageScale()
+    private void Update()
     {
+        if (instantMode)
+        {
+            image.transform.position = acceptedCoords + correction;
+        }
+        else
+        {
+            Vector3 newCoords = ((currentPosition - acceptedCoords) / movementSmoothFactor) + acceptedCoords;
+            currentPosition = newCoords;
+            image.transform.position = currentPosition + correction;
+        }
+    }
+
+    public void UpdateImageScale(float scale)
+    {
+        image.transform.localScale = new Vector3(scale, scale, 1);
         currentPosition = transformGpsDataToLocalDecartCoordinates(lastGpsCoords);
         acceptedCoords = currentPosition;
     }
