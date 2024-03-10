@@ -11,7 +11,7 @@ using UnityEngine;
  */
 public class MapSpriteShifter : MonoBehaviour
 {
-    public SpriteRenderer image;
+    public GameObject playField;
 
     public Vector2 imageSize = new Vector2(30.72f, 30.72f); 
     public Vector2 ldCorner = new Vector2(55.73762f,48.72372f); // x = Lon, y = lat;
@@ -40,8 +40,7 @@ public class MapSpriteShifter : MonoBehaviour
         translateCoeffs = new Vector2(imageSizeHalf.x / cornersDifference.y * 2, imageSizeHalf.y / cornersDifference.x * 2);
 
         SetCoordinates(centerCoords);
-        currentPosition = image.transform.position;
-
+        currentPosition = playField.transform.localPosition;
     }
 
     public void switchMode() 
@@ -55,19 +54,19 @@ public class MapSpriteShifter : MonoBehaviour
     {
         if (instantMode)
         {
-            image.transform.position = acceptedCoords + correction;
+            playField.transform.localPosition = acceptedCoords + correction;
         }
         else
         {
             Vector3 newCoords = ((currentPosition - acceptedCoords) / movementSmoothFactor) + acceptedCoords;
             currentPosition = newCoords;
-            image.transform.position = currentPosition + correction;
+            playField.transform.localPosition = currentPosition + correction;
         }
     }
 
     public void UpdateImageScale(float scale)
     {
-        image.transform.localScale = new Vector3(scale, scale, 1);
+        playField.transform.localScale = new Vector3(scale, scale, 1);
         currentPosition = transformGpsDataToLocalDecartCoordinates(lastGpsCoords);
         acceptedCoords = currentPosition;
     }
@@ -80,7 +79,7 @@ public class MapSpriteShifter : MonoBehaviour
     private Vector3 transformGpsDataToLocalDecartCoordinates(Vector2 gpsCoords)
     {
         lastGpsCoords = gpsCoords;
-        float imageScale = image.transform.localScale.x;
+        float imageScale = playField.transform.localScale.x;
         return new Vector3(
             (centerCoords.y - gpsCoords.y) * translateCoeffs.x * imageScale,
             (centerCoords.x - gpsCoords.x) * translateCoeffs.y * imageScale, 0);
